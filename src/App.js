@@ -3,11 +3,13 @@ import './App.css';
 import { Container, Row, Col, ListGroup, Button, Form, InputGroup, Alert } from 'react-bootstrap';
 
 function App() {
+  // Define state variables for web projects, new web project, alert message, and editable project
   const [webProjects, setWebProjects] = useState([]);
   const [newWebProject, setNewWebProject] = useState({ title: '', description: '', url: '' });
   const [alertMessage, setAlertMessage] = useState('');
   const [editableProject, setEditableProject] = useState(null);
 
+  // Use useEffect to fetch data when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,12 +27,13 @@ function App() {
     fetchData();
   }, []);
 
+  // Handle input change for the new web project form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewWebProject({ ...newWebProject, [name]: value });
   };
-  
 
+  // Handle adding a new web project
   const handleAddWebProject = async () => {
     try {
       if (!newWebProject.title || !newWebProject.description || !newWebProject.url) {
@@ -61,6 +64,7 @@ function App() {
     }
   };
 
+  // Handle deleting a web project
   const handleDeleteWebProject = async (id) => {
     try {
       const response = await fetch(`/api/${id}`, {
@@ -79,10 +83,12 @@ function App() {
     }
   };
 
+  // Handle clicking the edit button for a web project
   const handleEditClick = (project) => {
     setEditableProject(project);
   };
 
+  // Handle saving changes to a web project
   const handleSaveWebProject = async (id, updatedProject) => {
     try {
       const response = await fetch(`/api/${id}`, {
@@ -107,8 +113,8 @@ function App() {
       setAlertMessage('Error updating web project.');
     }
   };
-  
 
+  // Render the component
   return (
     <Container className="App">
       <Row>
@@ -121,12 +127,14 @@ function App() {
           )}
         </Col>
       </Row>
+      {/* Render the list of web projects */}
       <Row>
         <Col md={{ span: 6, offset: 3 }}>
           <ListGroup>
             {webProjects.map((project) => (
               <ListGroup.Item key={project.id} style={{ marginBottom: '10px' }}>
                 {editableProject === project ? (
+                  // Render the edit form for the selected project
                   <div>
                     <Form.Control
                       type="text"
@@ -161,6 +169,7 @@ function App() {
                     </Button>
                   </div>
                 ) : (
+                  // Render the project details and buttons for non-editable projects
                   <div>
                     <div>{project.title}</div>
                     <div>{project.description}</div>
@@ -184,6 +193,7 @@ function App() {
           </ListGroup>
         </Col>
       </Row>
+      {/* Render the form for adding a new web project */}
       <Row>
         <Col md={{ span: 6, offset: 3 }}>
           <h2><b>Add New Web Project</b></h2>
